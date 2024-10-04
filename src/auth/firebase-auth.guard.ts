@@ -1,4 +1,3 @@
-// src/auth/firebase-auth.guard.ts
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
@@ -16,10 +15,9 @@ export class FirebaseAuthGuard implements CanActivate {
 
         try {
             const decodedToken = await this.firebaseAdmin.auth().verifyIdToken(token);
-            // Add user and role to request
             request['user'] = {
                 ...decodedToken,
-                role: decodedToken.role || 'employee' // Default role
+                role: decodedToken.role || 'employee'
             };
             return true;
         } catch (error) {
