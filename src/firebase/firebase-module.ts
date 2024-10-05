@@ -7,7 +7,6 @@ import * as serviceAccount from '../serviceAccountKey.json';  // Adjust path as 
     {
       provide: 'FIREBASE_ADMIN',
       useFactory: () => {
-        // Check if Firebase is already initialized
         if (!admin.apps.length) {
           admin.initializeApp({
             credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
