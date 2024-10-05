@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 export class EmployeeDTO{
     id: number;
     name: string;
@@ -7,6 +8,9 @@ export class EmployeeDTO{
 }
 
 export class UpdateEmployeeDto {
+    @IsOptional()
     name?: string;
+    
+    @IsOptional()
     email?: string;
 }

@@ -4,20 +4,20 @@ export const EMPLOYEES = [
         name: 'Admin User',
         email: 'admin@test.com',
         role: 'admin',
-        firebaseUid: 'firebase-uid-for-admin' // You'll get this from Firebase
+        firebaseUid: 'vAOEoJ4riYPZi45zV4qAqzPZYSu2' // You'll get this from Firebase
     },
     {
         id: 2,
         name: 'Manager User',
         email: 'manager@test.com',
         role: 'manager',
-        firebaseUid: 'firebase-uid-for-manager'
+        firebaseUid: '1mxniPrRVKYsfGDnU0AGzOcJeMY2'
     },
     {
         id: 3,
         name: 'Employee User',
         email: 'employee@test.com',
         role: 'employee',
-        firebaseUid: 'firebase-uid-for-employee'
+        firebaseUid: '7ISDco4jy0WhAzvgUIp51kaD2Vp2'
     }
 ];
