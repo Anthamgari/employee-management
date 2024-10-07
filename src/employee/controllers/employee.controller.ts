@@ -1,21 +1,20 @@
 import { Controller, Get, Put, Body, Param, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
-import { FirebaseAuthGuard } from '../../auth/firebase-auth.guard';
+import { JwtAuthGuard } from '../../auth/firebase-auth.guard';
 import { EmployeeService } from '../employee.service';
 import { UpdateEmployeeDto } from '../employee.dto';
 
 @Controller('employees')
-@UseGuards(FirebaseAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class EmployeeController {
     constructor(private employeeService: EmployeeService) {}
 
     @Get()
     async getOwnData(@Req() req) {
-        const employees = await this.employeeService.getEmployees();
-        const ownData = employees.find((emp) => emp.firebaseUid === req.user.uid);
-        if (!ownData) {
+        const employee = await this.employeeService.getEmployeeById(req.user.uid);
+        if (!employee) {
             throw new UnauthorizedException('Employee not found');
         }
-        return ownData;
+        return employee;
     }
 
     @Put()
@@ -23,8 +22,7 @@ export class EmployeeController {
         @Req() req,
         @Body() updateData: UpdateEmployeeDto
     ) {
-        const employees = await this.employeeService.getEmployees();
-        const employee = employees.find(emp => emp.firebaseUid === req.user.uid);
+        const employee = await this.employeeService.getEmployeeById(req.user.uid);
         
         if (!employee) {
             throw new UnauthorizedException('Employee not found');
@@ -34,8 +32,8 @@ export class EmployeeController {
         let result = null;
         
         for (const [key, value] of updates) {
-            result = await this.employeeService.putEmployeeById(employee.id, key, value);
+            await this.employeeService.putEmployeeById(employee._id.toString(), key, value);
         }
-        return result;
+        return await this.employeeService.getEmployeeById(employee._id.toString());
     }
 }

@@ -1,65 +1,55 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { EMPLOYEES } from './Employee.Mock';
-import { resolve } from 'path';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from 'src/auth/user.schema';
+
 
 @Injectable()
 export class EmployeeService
 {
-    private employees = EMPLOYEES;
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-    public  getEmployees()
+    public async getEmployees()
     {
-        return this.employees;
+        return await this.userModel.find().exec();
     }
 
-    public  postEmployee(employee)
+    public  async postEmployee(employee)
     {
-        return this.employees.push(employee)
+        const newEmployee = new this.userModel(employee);
+        return await newEmployee.save();
     }
 
-    public  getEmployeeById(id: number) : Promise<any>
+    public async getEmployeeById(id: number) : Promise<any>
     {
-        const EmployeeId = Number(id)
-        return new Promise((resolve) => 
         {
-            const employee = this.employees.find((employee) => employee.id === EmployeeId)
+            const employee = await this.userModel.findById(id).exec();
             if(!employee)
             {
                  throw new HttpException("Not Found", 404);
     
             }
-            return resolve(employee);
-        });
+            return employee;
+        };
     }
 
-    public  deleteEmployeeById(id: number) : Promise<any>
+    public  async deleteEmployeeById(id: number) : Promise<any>
     {
-        const EmployeeId = Number(id)
-        return new Promise((resolve) =>
-        {
-        const index = this.employees.findIndex((employee) => employee.id === EmployeeId)
-        if(index === -1)
-            {
-             throw new HttpException("Not Found", 404);
-            }
-        this.employees.splice(index,1);
-        return resolve(this.employees)
-        });
-    }
-
-    public  putEmployeeById(id:number, propertyName: string, propertyValue: string) : Promise<any>
-    {
-        const EmployeeId = Number(id)
-        return new Promise((resolve) =>
-        {
-            const index = this.employees.findIndex((employee)=>employee.id===EmployeeId);
-            if(index === -1)
-            {
+        const result = await this.userModel.findByIdAndDelete(id).exec();
+        if (!result) {
             throw new HttpException("Not Found", 404);
-            }
-            this.employees[index][propertyName] = propertyValue 
-            return resolve(this.employees[index])
-        });
+        }
+        return { message: 'Employee deleted successfully' };
+    }
+
+    public async putEmployeeById(id:number, propertyName: string, propertyValue: string) : Promise<any>
+    {
+        const updatedEmployee = await this.userModel.findByIdAndUpdate(id, { [propertyName]: propertyValue }, { new: true }).exec();
+        if (!updatedEmployee) {
+            throw new HttpException("Not Found", 404);
+        }
+        return updatedEmployee;
     }
 }
 

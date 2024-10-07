@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Put, Body, Param, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
-import { FirebaseAuthGuard } from '../../auth/firebase-auth.guard';
+import { JwtAuthGuard } from '../../auth/firebase-auth.guard';
 import { EmployeeService } from '../employee.service';
 import { EmployeeDTO, UpdateEmployeeDto } from '../employee.dto';
 
 @Controller('manager/employees')
-@UseGuards(FirebaseAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ManagerController {
     constructor(private employeeService: EmployeeService) {}
 

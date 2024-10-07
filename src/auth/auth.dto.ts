@@ -20,6 +20,8 @@ export class VerifyOtpDto {
 }
 
 export class LoginUserDto {
+  @IsOptional()
   email: string;
+  @IsOptional()
   password: string;
 }
