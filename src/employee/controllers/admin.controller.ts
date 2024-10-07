@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Req, Unauth
 import { FirebaseAuthGuard } from '../../auth/firebase-auth.guard';
 import { EmployeeService } from '../employee.service';
 import { EmployeeDTO, UpdateEmployeeDto } from '../employee.dto';
+import { Measure } from 'src/auth/measure.decorator';
 
 @Controller('admin/employees')
 @UseGuards(FirebaseAuthGuard)
@@ -15,6 +16,7 @@ export class AdminController {
     }
 
     @Get()
+    @Measure()
     async getAllEmployees(@Req() req) {
         this.validateAdmin(req.user);
         return this.employeeService.getEmployees();
