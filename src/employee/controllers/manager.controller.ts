@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Body, Param, UseGuards, Req, UnauthorizedEx
 import { JwtAuthGuard } from '../../auth/firebase-auth.guard';
 import { EmployeeService } from '../employee.service';
 import { EmployeeDTO, UpdateEmployeeDto } from '../employee.dto';
+import { Measure } from 'src/auth/measure.decorator';
 
 @Controller('manager/employees')
 @UseGuards(JwtAuthGuard)
@@ -15,6 +16,7 @@ export class ManagerController {
     }
 
     @Get()
+    @Measure()
     async getAllEmployees(@Req() req) {
         this.validateManager(req.user);
         return this.employeeService.getEmployees();
@@ -27,6 +29,7 @@ export class ManagerController {
     }
 
     @Post()
+    @Measure()
     async createEmployee(@Req() req, @Body() employee: EmployeeDTO) {
         this.validateManager(req.user);
         return this.employeeService.postEmployee(employee);

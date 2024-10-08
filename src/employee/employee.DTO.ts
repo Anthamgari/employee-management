@@ -1,11 +1,25 @@
-import { IsOptional } from 'class-validator';
-export class EmployeeDTO{
-    id: number;
-    name: string;
-    email: string;
-    role: 'admin' | 'manager' | 'employee';
-    firebaseUid: string;
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+
+export enum UserRole {
+    Admin = 'admin',
+    Manager = 'manager',
+    Employee = 'employee',
 }
+ 
+export class EmployeeDTO{
+    @IsOptional()
+    id: number;
+
+    @IsEmail()
+    email: string;
+
+    @IsEnum(UserRole)
+    role: UserRole;
+    
+    @IsString()
+    password: string;
+}
+
 
 export class UpdateEmployeeDto {
     @IsOptional()

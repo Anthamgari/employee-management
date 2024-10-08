@@ -2,6 +2,7 @@ import { Controller, Get, Put, Body, Param, UseGuards, Req, UnauthorizedExceptio
 import { JwtAuthGuard } from '../../auth/firebase-auth.guard';
 import { EmployeeService } from '../employee.service';
 import { UpdateEmployeeDto } from '../employee.dto';
+import { Measure } from 'src/auth/measure.decorator';
 
 @Controller('employees')
 @UseGuards(JwtAuthGuard)
@@ -9,6 +10,7 @@ export class EmployeeController {
     constructor(private employeeService: EmployeeService) {}
 
     @Get()
+    @Measure()
     async getOwnData(@Req() req) {
         const employee = await this.employeeService.getEmployeeById(req.user.uid);
         if (!employee) {

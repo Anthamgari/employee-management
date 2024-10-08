@@ -115,7 +115,7 @@ export class AuthService {
   }
 
   private generateJwt(payload: { uid: string; email: string; role: string  }) {
-    return jwt.sign(payload, this.jwtSecret, { expiresIn: '1h' });
+    return jwt.sign(payload, this.jwtSecret, { expiresIn: '24h' });
   }
 
   async validateJwt(token: string) {

@@ -12,7 +12,7 @@ export class EmployeeService
 
     public async getEmployees()
     {
-        return await this.userModel.find().exec();
+        return await this.userModel.find().select('-password -__v').exec();
     }
 
     public  async postEmployee(employee)
@@ -24,7 +24,7 @@ export class EmployeeService
     public async getEmployeeById(id: number) : Promise<any>
     {
         {
-            const employee = await this.userModel.findById(id).exec();
+            const employee = await this.userModel.findById(id).select('-password -__v').exec();
             if(!employee)
             {
                  throw new HttpException("Not Found", 404);

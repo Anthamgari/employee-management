@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { Measure } from './measure.decorator';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

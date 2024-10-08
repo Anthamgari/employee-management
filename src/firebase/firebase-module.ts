@@ -1,19 +1,23 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
-import * as serviceAccount from '../serviceAccountKey.json';  // Adjust path as needed
 
 @Module({
+  imports: [ConfigModule],
   providers: [
     {
       provide: 'FIREBASE_ADMIN',
-      useFactory: () => {
+      useFactory: (configService: ConfigService) => {
+        const serviceAccount = JSON.parse(configService.get<string>('FIREBASE_SERVICE_ACCOUNT'));
+        
         if (!admin.apps.length) {
           admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+            credential: admin.credential.cert(serviceAccount),
           });
         }
         return admin;
       },
+      inject: [ConfigService],
     },
   ],
   exports: ['FIREBASE_ADMIN'],
